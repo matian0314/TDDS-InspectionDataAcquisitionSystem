@@ -1,0 +1,3 @@
+﻿1.为防止初始化过程中触发selection_change等事件，导致异常，所以添加了InitializeComplete属性，用以判断是否初始化完成。未完成初始化，很多事件不会触发。
+2.删除了ReviewCardName的text属性的初始值
+3.为StartReceiveMessage增加了try-catch，如果失败就重试

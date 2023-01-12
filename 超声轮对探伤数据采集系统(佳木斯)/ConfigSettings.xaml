@@ -1,0 +1,140 @@
+﻿<Window x:Class="超声轮对探伤数据采集系统.ConfigSettings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:超声轮对探伤数据采集系统"
+        mc:Ignorable="d"
+        Title="探头参数设置" Height="550" Width="800" Background="LightGray">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="5"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="5*"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="4*"></RowDefinition>
+            <RowDefinition Height="5"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <TextBlock Text="探头参数配置" FontSize="30" Foreground="MidnightBlue" HorizontalAlignment="Center"></TextBlock>
+        </Grid>
+        <Separator Grid.Row="1"></Separator>
+        <Grid Grid.Row="2">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="板卡信息" FontSize="25" Foreground="MidnightBlue" ></TextBlock>
+                <TextBlock Name="IpTextBlock" FontSize="25" Foreground="MidnightBlue"></TextBlock>
+                <TextBlock Name="CardNameTextBlock" FontSize="25" Foreground="MidnightBlue"></TextBlock>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="5"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" FontSize="18" Text="触发频率"></TextBlock>
+            <TextBlock Grid.Row="1" Grid.Column="0" FontSize="18" Text="触发方式"></TextBlock>
+            <TextBlock Grid.Row="2" Grid.Column="0" FontSize="18" Text="触发方向"></TextBlock>
+            <TextBlock Grid.Row="3" Grid.Column="0" FontSize="18" Text="触发次数"></TextBlock>
+            <TextBlock Grid.Row="4" Grid.Column="0" FontSize="18" Text="输入接口滤波"></TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="1" FontSize="18" Name="trig_freq_hz_textbox" TextChanged="trig_freq_hz_textbox_TextChanged"></TextBox>
+            <ComboBox Grid.Row="1" Grid.Column="1" FontSize="18" Name="TrigControlComboBox" SelectionChanged="TrigControlComboBox_SelectionChanged">
+                <ComboBoxItem Content="外触发"></ComboBoxItem>
+                <ComboBoxItem Content="自触发(仅测试用)"></ComboBoxItem>
+                <ComboBoxItem Content="编码器触发(仅测试用)"></ComboBoxItem>
+            </ComboBox>
+            <ComboBox Grid.Row="2" Grid.Column="1" FontSize="18" Name="TrigDirectionComboBox" SelectionChanged="TrigDirectionComboBox_SelectionChanged">
+                <ComboBoxItem Content="16ch-->1ch"></ComboBoxItem>
+                <ComboBoxItem Content="1ch-->16ch"></ComboBoxItem>
+            </ComboBox>
+            <TextBox Grid.Row="3" Grid.Column="1" FontSize="18" Name="out_trig_num_textbox" TextChanged="out_trig_num_textbox_TextChanged"></TextBox>
+            <TextBox Grid.Row="4" Grid.Column="1" FontSize="18" Name="input_filter_cfg_textbox" TextChanged="input_filter_cfg_textbox_TextChanged"></TextBox>
+            <TextBlock Grid.Row="0" Grid.Column="3" FontSize="18" Text="刷新频率(仅测试用)" Height="28" VerticalAlignment="Top"></TextBlock>
+            <TextBox Grid.Row="0" Grid.Column="4" FontSize="18" Name="wave_interval_textbox" TextChanged="wave_interval_textbox_TextChanged"></TextBox>
+            <TextBlock Grid.Row="1" Grid.Column="3" FontSize="18" Text="最大通道数" ></TextBlock>
+            <TextBox Grid.Row="1" Grid.Column="4" FontSize="18" Name="max_chan_textbox" TextChanged="max_chan_textbox_TextChanged"></TextBox>
+            <TextBlock Grid.Row="2" Grid.Column="3" FontSize="18" Text="声速(m/s)"></TextBlock>
+            <TextBox Grid.Row="2" Grid.Column="4" FontSize="18" Name="wave_speed_textbox" TextChanged="wave_speed_textbox_TextChanged"></TextBox>
+            <TextBlock Grid.Row="3" Grid.Column="3" FontSize="18" Text="板卡类型"></TextBlock>
+            <TextBox Grid.Row="3" Grid.Column="4" FontSize="18" Name="board_cfg_textbox" TextChanged="board_cfg_textbox_TextChanged"></TextBox>
+            <TextBlock Grid.Row="4" Grid.Column="3" FontSize="18" Text="每帧A波包含字节数"></TextBlock>
+            <TextBox Grid.Row="4" Grid.Column="4" FontSize="18" Name="frame_total_len_textbox" TextChanged="frame_total_len_textbox_TextChanged"></TextBox>
+
+        </Grid>
+        <Grid Grid.Row="4">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="探头信息" FontSize="25" Foreground="MidnightBlue" ></TextBlock>
+                <TextBlock Name="ProbeTypeTextblock" FontSize="25" Foreground="MidnightBlue"></TextBlock>
+                <TextBlock Name="ProbeNameTextblock" FontSize="25" Foreground="MidnightBlue"></TextBlock>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="5"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Column="0" Grid.Row="0" FontSize="18" Text="通道"></TextBlock>
+            <TextBlock Grid.Column="1" Grid.Row="0" FontSize="18" Name="dest_chan_textblock"></TextBlock>
+            <TextBlock Grid.Column="0" Grid.Row="1" FontSize="18" Text="增益"></TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="1" FontSize="18" Name="db_textbox" TextChanged="db_textbox_TextChanged"></TextBox>
+            <TextBlock Grid.Column="0" Grid.Row="2" FontSize="18" Text="触发延时(us)"></TextBlock>
+            <TextBox Grid.Column="1" Grid.Row="2" FontSize="18" Name="trig_delay_textbox" TextChanged="trig_delay_textbox_TextChanged"></TextBox>
+            <TextBlock Grid.Column="3" Grid.Row="0" FontSize="18" Text="采样延时(us)"></TextBlock>
+            <TextBox Grid.Column="4" Grid.Row="0" FontSize="18" Name="sample_delay_textbox" TextChanged="sample_delay_textbox_TextChanged"></TextBox>
+            <TextBlock Grid.Column="3" Grid.Row="1" FontSize="18" Text="触发宽度"></TextBlock>
+            <TextBox Grid.Column="4" Grid.Row="1" FontSize="18" Name="trig_width_textbox" TextChanged="trig_width_textbox_TextChanged"></TextBox>
+            <TextBlock Grid.Column="3" Grid.Row="2" FontSize="18" Text="检波模式" ></TextBlock>
+            <ComboBox Grid.Column="4" Grid.Row="2" FontSize="18" Name="HalfSel" SelectionChanged="HalfSel_SelectionChanged">
+                <ComboBoxItem Content="正半轴检波"></ComboBoxItem>
+                <ComboBoxItem Content="负半轴检波"></ComboBoxItem>
+                <ComboBoxItem Content="全检波"></ComboBoxItem>
+            </ComboBox>
+            <TextBlock Grid.Column="0" Grid.Row="4" FontSize="18" Text="探头类型"></TextBlock>
+            <ComboBox Grid.Column="1" Grid.Row="4" Name="FuncType" FontSize="18" SelectionChanged="FuncType_SelectionChanged">
+                <ComboBoxItem Content="测厚"></ComboBoxItem>
+                <ComboBoxItem Content="横前"></ComboBoxItem>
+                <ComboBoxItem Content="横后"></ComboBoxItem>
+                <ComboBoxItem Content="纵左"></ComboBoxItem>
+                <ComboBoxItem Content="纵右"></ComboBoxItem>
+                <ComboBoxItem Content="斜前"></ComboBoxItem>
+                <ComboBoxItem Content="斜后"></ComboBoxItem>
+                <ComboBoxItem Content="直探"></ComboBoxItem>
+                <ComboBoxItem Content="分层"></ComboBoxItem>
+            </ComboBox>
+            <TextBlock Grid.Row="4" Grid.Column="3" FontSize="18" Text="采样宽度"></TextBlock>
+            <TextBox Grid.Row="4" Grid.Column="4" FontSize="18" Name="sample_width_textbox" TextChanged="sample_width_textbox_TextChanged"></TextBox>
+        </Grid>
+        <Separator Grid.Row="6"></Separator>
+        <Grid Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button FontSize="18" Foreground="MidnightBlue" Grid.Column="0" Name="ConfigButton" Click="ConfigButton_Click">设置参数</Button>
+            <Button FontSize="18" Foreground="MidnightBlue" Grid.Column="1" Name="ConfigAllButton" Click="ConfigAllButton_Click">设置同类探头参数</Button>
+            <Button FontSize="18" Foreground="MidnightBlue" Grid.Column="2" Name="ReturnButton" Click="ReturnButton_Click">返回</Button>
+        </Grid>
+    </Grid>
+</Window>
