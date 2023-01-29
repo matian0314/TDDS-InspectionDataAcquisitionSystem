@@ -91,7 +91,7 @@ namespace 超声轮对探伤数据采集系统
         public MainWindow()
         {
             InitializeComponent();
-            log.Info("MainWindow");
+            log.Info("")
             InitializeEvents();
             CreateReviewChart();
             CreateLiveChart();
