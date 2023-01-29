@@ -253,6 +253,7 @@
     <Compile Include="RabbitMQClient\Consumer\RabbitMQConsumer.cs" />
     <Compile Include="RabbitMQClient\Provider\RabbitMQProvider.cs" />
     <Compile Include="Tools\BitmapHelper.cs" />
+    <Compile Include="Tools\CmdHelper.cs" />
     <Compile Include="Tools\DataTimeHelper.cs" />
     <Compile Include="Tools\ExceptionExtensions.cs" />
     <Compile Include="Tools\FileHelper.cs" />
@@ -272,6 +273,7 @@
     <Compile Include="探伤报文\ProbStatus.cs" />
     <Compile Include="探伤算法\DefectInfo.cs" />
     <Compile Include="探伤算法\InspectionHelper.cs" />
+    <Compile Include="探伤算法\InspectionJsonResult.cs" />
     <Compile Include="探伤算法\InspectionManager.cs" />
     <Compile Include="探伤算法\InspectionResult.cs" />
     <Compile Include="探伤算法\InspectSettings.cs" />

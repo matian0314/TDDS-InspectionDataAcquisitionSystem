@@ -296,37 +296,39 @@ namespace 探伤算法
             }
             return grad.ToString();
         }
-        public int GetAlarmLevel()
-        {
-            if (ManualRecheck == null)
-            {
-                if(IsDefect())
-                {
-                    if (Area > 300)
-                    {
-                        return 3;
-                    }
-                    else
-                    {
-                        return 2;
-                    }
-                }
-                else
-                {
-                    return 1;
-                }
-            }
-            else
-            {
-                if(ManualRecheck == ManualRecheckResult.HasDefect)
-                {
-                    return 3;
-                }
-                else
-                {
-                    return 1;
-                }
-            }
-        }
+        public int AlarmLevel { get; set; }
+        //之前用来判断伤等级的方法
+        //public int GetAlarmLevel()
+        //{
+        //    if (ManualRecheck == null)
+        //    {
+        //        if(IsDefect())
+        //        {
+        //            if (Area > 300)
+        //            {
+        //                return 3;
+        //            }
+        //            else
+        //            {
+        //                return 2;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            return 1;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        if(ManualRecheck == ManualRecheckResult.HasDefect)
+        //        {
+        //            return 3;
+        //        }
+        //        else
+        //        {
+        //            return 1;
+        //        }
+        //    }
+        //}
     }
 }

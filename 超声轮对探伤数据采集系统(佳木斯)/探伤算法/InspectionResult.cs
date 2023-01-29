@@ -17,8 +17,9 @@ namespace 探伤算法
             get
             {
                 if (DefectInfos.Count == 0) return 1;
-                return DefectInfos.Max(defect => defect.GetAlarmLevel());
+                return DefectInfos.Max(defect => defect.AlarmLevel);
             }
+
         }
         public string GetRemark()
         {

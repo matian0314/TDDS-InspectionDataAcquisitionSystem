@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using 探伤报文;
 
 namespace 探伤算法
@@ -217,6 +218,50 @@ namespace 探伤算法
                 CardName = probeInfo.CardName,
                 Line = probeInfo.LineName,
                 AxleIndex = key.Axle - 1,
+                Type = probeInfo.ProbeType,
+                ProbeName = probeInfo.ProbeName,
+                ChannelIndex = probeInfo.Channel - 1,
+                ProbeIndex = probeInfo.Index - 1,
+                CardIndex = cardInfo.Index - 1,
+                PointInterval = probeInfo.SoundPath / 500,
+                Gain = probeInfo.Db,
+                Status = 1,//有数据就是正常的
+            };
+            switch (probeInfo.ProbeType)
+            {
+                case "直探头":
+                    probeDataInfo.EffectiveSoundPathHigh = 60;
+                    probeDataInfo.EffectiveSoundPathLow = 10;
+                    probeDataInfo.TypeIndex = probeDataInfo.ProbeIndex / 2;
+                    probeDataInfo.ProbeZero = probeInfo.Config.sample_delay * 5900 / 200000;
+                    break;
+                case "斜探头":
+                    probeDataInfo.EffectiveSoundPathHigh = 150;
+                    probeDataInfo.EffectiveSoundPathLow = 50;//原为30,太低，改为60
+                    probeDataInfo.TypeIndex = probeDataInfo.ProbeIndex / 4;
+                    probeDataInfo.ProbeZero = probeInfo.Config.sample_delay * 3230 / 200000;
+                    break;
+                case "斜探头-轮缘":
+                    probeDataInfo.EffectiveSoundPathHigh = 600;
+                    probeDataInfo.EffectiveSoundPathLow = 50;
+                    probeDataInfo.TypeIndex = probeDataInfo.ProbeIndex / 4;
+                    probeDataInfo.ProbeZero = probeInfo.Config.sample_delay * 3230 / 200000;
+                    break;
+            }
+            return probeDataInfo;
+        }
+        public static ProbeDataInfo CreateFromConfigs(string probeName,int axle, CardConfigs configs = null)
+        {
+            if (configs == null) configs = CurrentCardConfigs;
+            ProbeInfo probeInfo = configs.Probes.FirstOrDefault(p => p.ProbeName == probeName);
+            if (probeInfo == null) throw new Exception($"板卡配置文件错误，未找到{probeName}的探头配置信息");
+            CardInfo cardInfo = configs.Cards.FirstOrDefault(c => c.Ip == probeInfo.Ip);
+            ProbeDataInfo probeDataInfo = new ProbeDataInfo()
+            {
+                AlarmLevel = 0,
+                CardName = probeInfo.CardName,
+                Line = probeInfo.LineName,
+                AxleIndex = axle,
                 Type = probeInfo.ProbeType,
                 ProbeName = probeInfo.ProbeName,
                 ChannelIndex = probeInfo.Channel - 1,
