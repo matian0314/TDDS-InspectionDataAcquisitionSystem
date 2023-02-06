@@ -327,7 +327,7 @@ namespace 探伤算法
             //参数1 文件存储的根目录
             string sourceDir = ConfigurationManager.AppSettings["StoragePath"];
             //参数2 过车时间/探伤文件存储的子文件夹 passTime
-            string destFilePath = Path.Combine(sourceDir, interpreter, $"{passTime}_探伤结果.txt");
+            string destFilePath = Path.Combine(sourceDir, $"{passTime}_探伤结果.txt");
             CmdHelper.RunPythonScript(interpreter, scriptPath, sourceDir, passTime, destFilePath);
             return destFilePath;
         }

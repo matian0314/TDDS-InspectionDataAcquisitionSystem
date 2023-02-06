@@ -191,11 +191,15 @@ namespace 探伤报文
                             {
                                 KeyValuePair<RepoKey, List<byte[]>> pair = JsonConvert.DeserializeObject<KeyValuePair<RepoKey, List<byte[]>>>(json);
                                 ProbeDataInfo probeDataInfo = ProbeDataInfo.CreateFromConfigs(pair.Key, config);
-                                if(inspectionDefects.Any(d => d.ProbeName == probeDataInfo.ProbeName))
+                                if(inspectionDefects.Any(d => d.ProbeName == probeDataInfo.ProbeName && d.HasDefect != "无伤"))
                                 {
-                                    var defect = inspectionDefects.First(d => d.ProbeName == probeDataInfo.ProbeName);
+                                    var defect = inspectionDefects.First(d => d.ProbeName == probeDataInfo.ProbeName && d.HasDefect != "无伤");
                                     var inspectResult = InspectionManager.Inspect(probeDataInfo, passTime, pair.Value);
-                                    inspectResult.DefectInfos.First(d =>d.EstimatedRealArea == inspectResult.DefectInfos.Max(dInfo => dInfo.EstimatedRealArea)).AlarmLevel = defect.Confidence > 0.95 ? 3 : 2;
+                                    if(inspectResult.DefectInfos.Count > 0)
+                                    {
+                                        inspectResult.DefectInfos.First(d => d.EstimatedRealArea == inspectResult.DefectInfos.Max(dInfo => dInfo.EstimatedRealArea)).AlarmLevel = defect.Confidence > 0.95 ? 3 : 2;
+                                    }
+                                    
                                     InspectionResults.Add(probeDataInfo, inspectResult);
                                 }
                             }
@@ -287,6 +291,7 @@ namespace 探伤报文
             }
             return config;
         }
+
         public static List<ProbeDetails> CreateProbeDetails(CardConfigs configs, int axleNum)
         {
             var result = new List<ProbeDetails>();

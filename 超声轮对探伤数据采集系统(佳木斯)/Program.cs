@@ -19,17 +19,14 @@ namespace 超声轮对探伤数据采集系统_佳木斯_
     public static class Program
     {
         public const string Version = "V1.0";
-        public const string CompileTime = "2023年1月29日";
+        public const string CompileTime = "2023年2月6日";
         [STAThread]
         public static void Main()
         {
             log4net.Config.XmlConfigurator.Configure();
             ILog log = log4net.LogManager.GetLogger("Main");
             log.Info($"当前软件版本为{Version}");
-            log.Info($"软件编译时间为2023年1月29日");
-            //
-            InspectionInfo info = new InspectionInfo();
-            //DataRepo.RepoWrittenComplete.Invoke("2022年10月18日22时13分05秒");
+            log.Info($"软件编译时间为2023年2月6日");
             try
             {
                 App app = new App();

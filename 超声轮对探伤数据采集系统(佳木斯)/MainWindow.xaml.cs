@@ -29,6 +29,7 @@ using Arction.Wpf.Charting.Views.ViewXY;
 using Arction.Wpf.Charting.Annotations;
 using System.ComponentModel;
 using System.Windows.Threading;
+using 超声轮对探伤数据采集系统_佳木斯_;
 
 namespace 超声轮对探伤数据采集系统
 {
@@ -91,7 +92,6 @@ namespace 超声轮对探伤数据采集系统
         public MainWindow()
         {
             InitializeComponent();
-            log.Info("")
             InitializeEvents();
             CreateReviewChart();
             CreateLiveChart();
@@ -244,7 +244,7 @@ namespace 超声轮对探伤数据采集系统
         /// </summary>
         private void ConfigUILeftOrRight()
         {
-            this.Title = $"超声轮对探伤数据采集系统 { (IsRightSide ? "右侧" : "左侧") } (机车专用)";
+            this.Title = $"超声轮对探伤数据采集系统 { (IsRightSide ? "右侧" : "左侧") } (机车专用) {Program.Version}";
             this.DataSide.Text = $"数据采集（{ (IsRightSide ? "右侧" : "左侧") }）";
             if (!IsRightSide)
             {
