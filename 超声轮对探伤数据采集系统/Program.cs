@@ -1,32 +1,32 @@
 ﻿using CardConfigurations;
 using Eth;
 using log4net;
+using Microsoft.Scripting.Utils;
 using Newtonsoft.Json;
 using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Tools;
 using 探伤报文;
 using 探伤算法;
-using 超声轮对探伤数据采集系统;
 
-namespace 超声轮对探伤数据采集系统_佳木斯_
+namespace 超声轮对探伤数据采集系统
 {
     public static class Program
     {
-        public const string Version = "V1.0";
-        public const string CompileTime = "2023年2月6日";
         [STAThread]
         public static void Main()
         {
             log4net.Config.XmlConfigurator.Configure();
             ILog log = log4net.LogManager.GetLogger("Main");
-            log.Info($"当前软件版本为{Version}");
-            log.Info($"软件编译时间为2023年2月6日");
+            var assembly = Assembly.GetExecutingAssembly();
+            log.Info($"软件版本: {assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version}");
+            log.Info($"{assembly.GetCustomAttribute<AssemblyDescriptionAttribute>().Description}");
             try
             {
                 App app = new App();

@@ -7,8 +7,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{A17CD496-2C2E-458B-B577-F98DF5EF7AEF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>超声轮对探伤数据采集系统_佳木斯_</RootNamespace>
-    <AssemblyName>超声轮对探伤数据采集系统%28佳木斯%29</AssemblyName>
+    <RootNamespace>超声轮对探伤数据采集系统</RootNamespace>
+    <AssemblyName>超声轮对探伤数据采集系统</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -97,7 +97,7 @@
     <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>超声轮对探伤数据采集系统_佳木斯_.Program</StartupObject>
+    <StartupObject>超声轮对探伤数据采集系统.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Arction.DirectX, Version=10.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
@@ -336,6 +336,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="App_佳木斯_16.config" />
+    <None Include="App_佳木斯_15.config" />
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">

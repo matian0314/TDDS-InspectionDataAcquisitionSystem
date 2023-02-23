@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:超声轮对探伤数据采集系统"
         mc:Ignorable="d"
         xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
-        Title="超声轮对探伤数据采集系统 右侧(佳木斯)" Height="972" Width="1728" Background="LightGray">
+        Title="超声轮对探伤数据采集系统 右侧" Height="972" Width="1728" Background="LightGray">
     <Grid>
         <Grid.RowDefinitions>
             <!--标题-->

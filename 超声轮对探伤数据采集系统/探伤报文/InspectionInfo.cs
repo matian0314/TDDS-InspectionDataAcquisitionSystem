@@ -40,7 +40,7 @@ namespace 探伤报文
         }
         static InspectionInfo()
         {
-            DataRepo.RepoWrittenComplete += CreateInspectionFileWithPythonScript;
+
         }
 
         public static void DataRepo_RepoWrittenComplete(string passTime)
@@ -146,12 +146,11 @@ namespace 探伤报文
                 log.Error(ex.ToRecord());
                 
             }
- 
         }
 
         public static void CreateInspectionFileWithPythonScript(string passTime)
         {
-            log.Info("开始生成探伤判别报文");
+            log.Info("开始进行探伤判别");
             log.Info($"调用探伤判别程序");
             string fileName = InspectionManager.CallPythonScript(passTime);
             var inspectionDefects = InspectionJsonResult.ReadJsonResultFile(fileName);
@@ -249,7 +248,7 @@ namespace 探伤报文
                 };
                 info.DefectMsg.Add(defectMsg);
                 FileHelper.CreateFile(Path.Combine(MessagePath, $"{passTime}Inspection{ConfigurationManager.AppSettings["Side"]}.txt"), JsonConvert.SerializeObject(info));
-                log.Info("开始生成探伤判别报文");
+                log.Info($"开始生成探伤判别报文{Path.Combine(MessageStoragePath, $"{passTime}Inspection{ConfigurationManager.AppSettings["Side"]}.txt")}");
                 FileHelper.CreateFile(Path.Combine(MessageStoragePath, $"{passTime}Inspection{ConfigurationManager.AppSettings["Side"]}.txt"), JsonConvert.SerializeObject(info));
                 foreach (var file in Directory.GetFiles(CombinePath))
                 {

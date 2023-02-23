@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "超声轮对探伤数据采集系统(佳木斯)", "超声轮对探伤数据采集系统(佳木斯)\超声轮对探伤数据采集系统(佳木斯).csproj", "{A17CD496-2C2E-458B-B577-F98DF5EF7AEF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "超声轮对探伤数据采集系统", "超声轮对探伤数据采集系统\超声轮对探伤数据采集系统.csproj", "{A17CD496-2C2E-458B-B577-F98DF5EF7AEF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

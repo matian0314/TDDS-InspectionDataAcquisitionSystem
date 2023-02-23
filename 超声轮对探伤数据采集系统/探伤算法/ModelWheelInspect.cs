@@ -16,7 +16,7 @@ namespace 探伤算法
     public class ModelWheelInspect
     {
         public List<DefectInfo> DefectInfos = new List<DefectInfo>();
-        private CardConfigs Configs;
+        private readonly CardConfigs Configs = CardConfigs.ReadFromFile();
         public double AnglePerProbe = (26 / (Math.PI * double.Parse(ConfigurationManager.AppSettings["DefaultWheelDiameter"])) * 360);
         public ModelWheelInspect(List<InspectionResult> inspectionResults, CardConfigs configs = null)
         {

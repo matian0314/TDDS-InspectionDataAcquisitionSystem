@@ -29,7 +29,8 @@ using Arction.Wpf.Charting.Views.ViewXY;
 using Arction.Wpf.Charting.Annotations;
 using System.ComponentModel;
 using System.Windows.Threading;
-using 超声轮对探伤数据采集系统_佳木斯_;
+using 探伤报文;
+using System.Reflection;
 
 namespace 超声轮对探伤数据采集系统
 {
@@ -116,6 +117,7 @@ namespace 超声轮对探伤数据采集系统
                 EthManager.DataGenerated += OnDataGenerated;
                 EthManager.ConnectedIpListChanged += OnConnectedIpListChanged;
                 DataRepo.RepoWrittenComplete += OnUpdateCollectionStatus;
+                DataRepo.RepoWrittenComplete += InspectionInfo.CreateInspectionFileWithPythonScript;
                 UpdateConnectionStatus(EthManager.ConnectedIpList);
 
                 
@@ -140,7 +142,7 @@ namespace 超声轮对探伤数据采集系统
                         RabbitMQConsumer.StartReceiveMessage("485Right", OnReceive485Message);
                     }
                 });
-
+                IntializeFolders();
                 //没有这句话，数据绑定不到这里来
                 DataContext = this;
             }
@@ -150,6 +152,21 @@ namespace 超声轮对探伤数据采集系统
                 throw;
             }
 
+        }
+
+        private void IntializeFolders()
+        {
+            Directory.CreateDirectory(ConfigurationManager.AppSettings["StoragePath"]);
+            Directory.CreateDirectory(ConfigurationManager.AppSettings["SendFilePath"]);
+            Directory.CreateDirectory(ConfigurationManager.AppSettings["InspectionMessageStoragePath"]);
+            Directory.CreateDirectory(ConfigurationManager.AppSettings["SendDataPath"]);
+            Directory.CreateDirectory(ConfigurationManager.AppSettings["CombineFilePath"]);
+            Directory.CreateDirectory(ConfigurationManager.AppSettings["IntermediatePath"]);
+            if(File.Exists(ConfigurationManager.AppSettings["PythonInterpreter"]) == false || File.Exists(ConfigurationManager.AppSettings["PythonScriptPath"]) == false)
+            {
+                log.Error("python脚本不存在!请检查");
+                MessageBox.Show("python环境不完整!请检查");
+            }
         }
 
         private void OnReceive485Message(string message)
@@ -180,6 +197,7 @@ namespace 超声轮对探伤数据采集系统
         {
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Start();
             timer.Tick += (obj, sender) =>
             {
                 CurrentDate.Text = DateTime.Now.ToLongDateString();
@@ -244,7 +262,7 @@ namespace 超声轮对探伤数据采集系统
         /// </summary>
         private void ConfigUILeftOrRight()
         {
-            this.Title = $"超声轮对探伤数据采集系统 { (IsRightSide ? "右侧" : "左侧") } (机车专用) {Program.Version}";
+            this.Title = $"超声轮对探伤数据采集系统 { (IsRightSide ? "右侧" : "左侧") } (机车专用) {Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version}";
             this.DataSide.Text = $"数据采集（{ (IsRightSide ? "右侧" : "左侧") }）";
             if (!IsRightSide)
             {
@@ -695,7 +713,7 @@ namespace 超声轮对探伤数据采集系统
         #endregion
         private string BaseDirPath = ConfigurationManager.AppSettings["StoragePath"];
         private string _selectedTime = "";
-        private string SelectedTime
+        public string SelectedTime
         {
             get => _selectedTime;
             set
