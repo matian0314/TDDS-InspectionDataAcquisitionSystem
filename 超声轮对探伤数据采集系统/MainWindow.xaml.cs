@@ -31,6 +31,7 @@ using System.ComponentModel;
 using System.Windows.Threading;
 using 探伤报文;
 using System.Reflection;
+using MyLogger;
 
 namespace 超声轮对探伤数据采集系统
 {
@@ -39,7 +40,7 @@ namespace 超声轮对探伤数据采集系统
     /// </summary>
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
-        private readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         private bool InitializeComplete = false;
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>

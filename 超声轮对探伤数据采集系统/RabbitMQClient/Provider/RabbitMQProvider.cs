@@ -1,5 +1,6 @@
 ﻿using Helpers;
 using log4net;
+using MyLogger;
 using RabbitMQ.Client;
 using System;
 using System.Configuration;
@@ -9,7 +10,7 @@ namespace RabbitMQClient
 {
     public static class RabbitMQProvider
     {
-        private static ILog log = LogManager.GetLogger("RabbitMQProvider");
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         public static bool SendMessage(string key, string message)
         {
             if (!string.Equals(ConfigurationManager.AppSettings["EnalbeRabbitMq"], "true", StringComparison.OrdinalIgnoreCase))

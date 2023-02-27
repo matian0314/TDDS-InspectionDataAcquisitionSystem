@@ -1,5 +1,6 @@
 ﻿using Eth;
 using Helpers;
+using MyLogger;
 using Newtonsoft.Json;
 using System;
 using 超声轮对探伤数据采集系统.Eth;
@@ -8,7 +9,7 @@ namespace CardConfigurations
 {
     public class ProbeInfo
     {
-        private log4net.ILog log = log4net.LogManager.GetLogger(nameof(ProbeInfo));
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         /// <summary>
         /// 在YW/YN/ZN/ZW中的探头编号
         /// </summary>

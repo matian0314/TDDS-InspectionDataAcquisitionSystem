@@ -2,6 +2,7 @@
 using Eth;
 using log4net;
 using Microsoft.Scripting.Utils;
+using MyLogger;
 using Newtonsoft.Json;
 using SharpDX.Direct3D9;
 using System;
@@ -22,8 +23,7 @@ namespace 超声轮对探伤数据采集系统
         [STAThread]
         public static void Main()
         {
-            log4net.Config.XmlConfigurator.Configure();
-            ILog log = log4net.LogManager.GetLogger("Main");
+            SubscribeLogger log = SubscribeLogger.GetLogger("Main");
             var assembly = Assembly.GetExecutingAssembly();
             log.Info($"软件版本: {assembly.GetCustomAttribute<AssemblyFileVersionAttribute>().Version}");
             log.Info($"{assembly.GetCustomAttribute<AssemblyDescriptionAttribute>().Description}");

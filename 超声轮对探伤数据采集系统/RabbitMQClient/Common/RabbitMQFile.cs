@@ -1,4 +1,5 @@
 ﻿using log4net;
+using MyLogger;
 using System.IO;
 using Tools;
 using 报文转发.RabbitMQClient.Common.Configuration;
@@ -23,7 +24,7 @@ namespace 报文转发.RabbitMQClient.Common
         /// 文件最后修改时间
         /// </summary>
         public string CreationTime { get; set; }
-        private static ILog log = LogManager.GetLogger("RabbitMQFile");
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         private RabbitMQFile() { }
         public static RabbitMQFile Create(string fullName, RabbitMQSendFileConfig config)
         {

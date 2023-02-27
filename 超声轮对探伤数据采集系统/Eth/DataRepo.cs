@@ -7,12 +7,13 @@ using System.Linq;
 using System.Threading;
 using CardConfigurations;
 using System.Threading.Tasks;
+using MyLogger;
 
 namespace Eth
 {
     public static class DataRepo
     {
-        public static log4net.ILog log = log4net.LogManager.GetLogger("DataRepo");
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         public static bool WriteMemoryEnabled { get; set; } = true;
         public static string StorageDirectory { get; }
         public static string CombineFilePath { get; }

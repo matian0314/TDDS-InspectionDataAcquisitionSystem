@@ -1,4 +1,5 @@
 ﻿using Eth;
+using MyLogger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +30,7 @@ namespace 超声轮对探伤数据采集系统
         public string ProbeName { get; set; }
         public string ProbeType { get; set; }
         public MainWindow MainWindow { get; set; }
-        private log4net.ILog log = log4net.LogManager.GetLogger(nameof(ConfigSettings));
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         public ConfigSettings(MainWindow MainWindow, gen_cfg_t genConfig, chan_cfg_t chnConfig)
         {
             GeneralConfig = genConfig;

@@ -1,5 +1,6 @@
 ﻿using Eth;
 using Helpers;
+using MyLogger;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace CardConfigurations
 {
     public class CardInfo
     {
-        private log4net.ILog log = log4net.LogManager.GetLogger(nameof(CardInfo));
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         /// <summary>
         /// Ip地址（形如192.168.1.20）
         /// </summary>

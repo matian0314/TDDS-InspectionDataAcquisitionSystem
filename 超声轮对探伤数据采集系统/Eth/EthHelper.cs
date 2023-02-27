@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyLogger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace Eth
 {
     public static class EthHelper
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(nameof(EthHelper));
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         public static sbyte[] GetIpFromArray(this sbyte[,] connectIps, int index)
         {
             return new sbyte[]{ connectIps[4 * index / 100, 4 * index % 100], connectIps[4 * index / 100, 4 * index % 100 + 1] , connectIps[4 * index / 100, 4 * index % 100 + 2] ,connectIps[4 * index / 100, 4 * index % 100 + 3] };

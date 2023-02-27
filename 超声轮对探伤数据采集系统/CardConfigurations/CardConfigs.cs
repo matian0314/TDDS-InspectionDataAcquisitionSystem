@@ -1,4 +1,5 @@
 ﻿using Eth;
+using MyLogger;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace CardConfigurations
 {
     public class CardConfigs
     {
-        private static log4net.ILog log = log4net.LogManager.GetLogger(nameof(MainWindow));
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         //只能由读取的方式生成
         private CardConfigs() { }
         public static CardConfigs ReadFromFile(string path)

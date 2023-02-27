@@ -242,6 +242,8 @@
     <Compile Include="ConfigSettings.xaml.cs">
       <DependentUpon>ConfigSettings.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Log4net\LogHelper.cs" />
+    <Compile Include="Log4net\SubscribeLogger.cs" />
     <Compile Include="ProbeInfoViewModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="RabbitMQClient\Common\Configuration\RabbitMQClientConfigs.cs" />
@@ -336,8 +338,15 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="App_佳木斯_16.config" />
-    <None Include="App_佳木斯_15.config" />
+    <None Include="App_佳木斯_16.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="App_佳木斯_15.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Log4net\log4net.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">

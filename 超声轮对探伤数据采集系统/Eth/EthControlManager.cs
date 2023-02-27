@@ -10,6 +10,7 @@ using System.Threading;
 using Helpers;
 using _485通信._485协议;
 using System.IO;
+using MyLogger;
 
 namespace 超声轮对探伤数据采集系统.Eth
 {
@@ -22,7 +23,7 @@ namespace 超声轮对探伤数据采集系统.Eth
         public event ConnectedIpListChangedHandler ConnectedIpListChanged;
         public event Action<int[], string, int> DataGenerated;
         //Private
-        private readonly log4net.ILog log = log4net.LogManager.GetLogger(nameof(MainWindow));
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         private sbyte[,] PreviousIp = new sbyte[4, 100];
         private int ConnectedIpCount = 0;
         private volatile bool SendingMessageNow = false;

@@ -1,4 +1,5 @@
 ﻿using log4net;
+using MyLogger;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
@@ -11,7 +12,7 @@ namespace RabbitMQClient
 {
     public static class RabbitMQConsumer
     {
-        private static ILog log = LogManager.GetLogger("RabbitMQConsumer");
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         public static void StartReceiveMessage(string key, Action<string> OnReceiveMessage)
         {
             if(!string.Equals(ConfigurationManager.AppSettings["EnalbeRabbitMq"], "true", StringComparison.OrdinalIgnoreCase))

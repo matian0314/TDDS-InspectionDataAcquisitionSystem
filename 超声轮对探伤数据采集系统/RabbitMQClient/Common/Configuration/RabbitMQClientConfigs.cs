@@ -10,6 +10,7 @@ using System.Configuration;
 using Newtonsoft.Json;
 using log4net;
 using Tools;
+using MyLogger;
 
 namespace 报文转发.RabbitMQClient.Common.Configuration
 {
@@ -22,7 +23,7 @@ namespace 报文转发.RabbitMQClient.Common.Configuration
         //Private
         private static RabbitMQClientConfigs Config { get; set; } = null;
         private static object locker = new object();
-        private static ILog log = LogManager.GetLogger("RabbitMQClientConfigs");
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         //COMMON Member
         //public
         public List<RabbitMQSendFileConfig> SendFileConfigurations { get; set; } = new List<RabbitMQSendFileConfig>();

@@ -213,7 +213,7 @@ namespace 探伤算法
         }
         public bool IsDefect()
         {
-            if(Average < 255 * 0.6 || Average25 < 255 * 0.8)
+            if (Average < 255 * 0.6 || Average25 < 255 * 0.8)
             {
                 return false;
             }
@@ -248,7 +248,7 @@ namespace 探伤算法
                 {
                     return false;
                 }
-                if(Height / Width < 2 )
+                if (Height / Width < 2)
                 {
                     return false;
                 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyLogger;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Tools
 {
     public static class CmdHelper
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         public static void RunPythonScript(string interpreter, string fileName, params string[] args)
         {
             RunPythonScript(interpreter, fileName, null, null, args);

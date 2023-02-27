@@ -1,5 +1,6 @@
 ﻿using CardConfigurations;
 using Eth;
+using MyLogger;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -18,7 +19,7 @@ namespace 探伤报文
 {
     public class InspectionInfo
     {
-        private static readonly log4net.ILog log = log4net.LogManager.GetLogger(nameof(InspectionInfo));
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         public static string CombinePath = ConfigurationManager.AppSettings["CombineFilePath"];
         public static string MessagePath = ConfigurationManager.AppSettings["SendFilePath"];
         public static string MessageStoragePath = ConfigurationManager.AppSettings["InspectionMessageStoragePath"];
@@ -190,9 +191,9 @@ namespace 探伤报文
                             {
                                 KeyValuePair<RepoKey, List<byte[]>> pair = JsonConvert.DeserializeObject<KeyValuePair<RepoKey, List<byte[]>>>(json);
                                 ProbeDataInfo probeDataInfo = ProbeDataInfo.CreateFromConfigs(pair.Key, config);
-                                if(inspectionDefects.Any(d => d.ProbeName == probeDataInfo.ProbeName && d.HasDefect != "无伤"))
+                                if(inspectionDefects.Any(d => d.ProbeName == probeDataInfo.ProbeName && d.HasDefect != "无伤" && d.AxleNum == probeDataInfo.AxleIndex + 1))
                                 {
-                                    var defect = inspectionDefects.First(d => d.ProbeName == probeDataInfo.ProbeName && d.HasDefect != "无伤");
+                                    var defect = inspectionDefects.First(d => d.ProbeName == probeDataInfo.ProbeName && d.HasDefect != "无伤" && d.AxleNum == probeDataInfo.AxleIndex + 1);
                                     var inspectResult = InspectionManager.Inspect(probeDataInfo, passTime, pair.Value);
                                     if(inspectResult.DefectInfos.Count > 0)
                                     {
@@ -319,8 +320,8 @@ namespace 探伤报文
                         Index = config.Index,
                         LineIndex = (int)config.LineName,
                         Path = (int)config.SoundPath,
-                        //声速(m/s) * sample_width(us) / 2000
-                        ProbeZero = Math.Round(config.Config.sample_delay * soundSpeed / 2000, 2),
+                        //声速(m/s) * sample_width(us) / 200000
+                        ProbeZero = Math.Round(config.Config.sample_delay * soundSpeed / 200000, 2),
                         Size = 0,
                         Status = 1,
                         WavePtIntv = Math.Round(config.SoundPath / 500, 3),

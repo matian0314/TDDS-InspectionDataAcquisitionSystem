@@ -1,5 +1,6 @@
 ﻿using Arction.Wpf.SignalProcessing;
 using Helpers;
+using MyLogger;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -16,7 +17,7 @@ namespace 超声轮对探伤数据采集系统
     /// </summary>
     public partial class App : Application
     {
-        public log4net.ILog log = log4net.LogManager.GetLogger("App");
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         public App()
         {
             try

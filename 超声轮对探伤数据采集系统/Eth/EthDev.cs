@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyLogger;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -11,7 +12,7 @@ namespace Eth
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]//回调函数中不加这个会自动退出
         public delegate int EthCallBackFunc(ref EthRevFrame frame);
 
-        private readonly static log4net.ILog log = log4net.LogManager.GetLogger(nameof(EthDev));
+        private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         [DllImport("ut_eth.dll")]
         public static extern int set_deal_callback(EthCallBackFunc callBack);
         [DllImport("ut_eth.dll")]
