@@ -364,6 +364,54 @@
     <Resource Include="Source\Icon\指示灯亮.png" />
     <Resource Include="Source\Icon\指示灯灭.png" />
     <Resource Include="Source\Icon\车轮.png" />
+    <Content Include="Arction\Arction.DirectX.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Arction\Arction.DirectXFiles.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Arction\Arction.DirectXInit.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Arction\Arction.Licensing.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Arction\Arction.RenderingDefinitions.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Arction\Arction.RenderingEngine.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Arction\Arction.RenderingEngine11.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Arction\Arction.RenderingEngine9.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Arction\Arction.Wpf.Charting.LightningChart.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Arction\Arction.Wpf.Charting.LightningChart.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Arction\Arction.Wpf.ChartingMVVM.LightningChart.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Arction\Arction.Wpf.ChartingMVVM.LightningChart.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Arction\Arction.Wpf.SignalProcessing.SignalTools.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Arction\Arction.Wpf.SignalProcessing.SignalTools.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
+    <Content Include="Arction\Arction.Wpf.TradingCharts.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Arction\Arction.Wpf.TradingCharts.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
     <Content Include="ut_eth.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

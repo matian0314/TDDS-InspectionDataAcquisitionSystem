@@ -4,7 +4,6 @@ using log4net;
 using Microsoft.Scripting.Utils;
 using MyLogger;
 using Newtonsoft.Json;
-using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 using System.IO;
