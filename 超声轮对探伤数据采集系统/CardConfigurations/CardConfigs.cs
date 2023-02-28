@@ -20,9 +20,18 @@ namespace CardConfigurations
         private CardConfigs() { }
         public static CardConfigs ReadFromFile(string path)
         {
+
+
             if (!File.Exists(path))
             {
-                CreateTestConfigFileForJiamusi();
+                if (ConfigurationManager.AppSettings["Site"].ToString() == "佳木斯")
+                {
+                    CreateTestConfigFileForJiamusi();
+                }
+                else if(ConfigurationManager.AppSettings["Site"].ToString() == "齐齐哈尔")
+                {
+                    CreateTestConfigFileForQiqihaer();
+                }
             }
             string configString;
             using (StreamReader sr = File.OpenText(path))

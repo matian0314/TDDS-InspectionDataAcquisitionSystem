@@ -364,9 +364,6 @@
     <Resource Include="Source\Icon\指示灯亮.png" />
     <Resource Include="Source\Icon\指示灯灭.png" />
     <Resource Include="Source\Icon\车轮.png" />
-    <Resource Include="readme.txt">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
     <Content Include="ut_eth.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
