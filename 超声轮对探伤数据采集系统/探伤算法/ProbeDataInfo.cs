@@ -1,5 +1,6 @@
 ﻿using CardConfigurations;
 using Eth;
+using MyLogger;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace 探伤算法
 {
     public class ProbeDataInfo
     {
+        public static SubscribeLogger log = SubscribeLogger.GetLogger("ProbeDataInfo");
         /// <summary>
         /// 属于哪一条探测线
         /// 1-YW 2-YN 3-ZN 4-ZW 
@@ -168,7 +170,11 @@ namespace 探伤算法
         {
             if (configs == null) configs = CurrentCardConfigs;
             ProbeInfo probeInfo = configs.Probes.FirstOrDefault(p => probeStatus.LineIndex == (int)p.LineName && probeStatus.Index == p.Index);
-            if (probeInfo == null) throw new Exception($"板卡配置文件错误，未找到{probeStatus.LineIndex}号线{probeStatus.Index}探头配置信息");
+            if (probeInfo == null)
+            {
+                log.Error($"板卡配置文件错误，未找到{probeStatus.LineIndex}号线{probeStatus.Index}探头配置信息");
+                return null;
+            }
             CardInfo cardInfo = configs.Cards.FirstOrDefault(c => c.Ip == probeInfo.Ip);
             ProbeDataInfo probeDataInfo = new ProbeDataInfo()
             {
@@ -210,7 +216,11 @@ namespace 探伤算法
         {
             if (configs == null) configs = CurrentCardConfigs;
             ProbeInfo probeInfo = configs.Probes.FirstOrDefault(p => key.Ip == p.Ip && key.Channel == p.Channel - 1);
-            if (probeInfo == null) throw new Exception($"板卡配置文件错误，未找到Ip为{key.Ip}的{key.Channel + 1}通道的探头配置信息");
+            if (probeInfo == null)
+            {
+                log.Error($"板卡配置文件错误，未找到Ip为{key.Ip}的{key.Channel + 1}通道的探头配置信息");
+                return null;
+            }
             CardInfo cardInfo = configs.Cards.FirstOrDefault(c => c.Ip == probeInfo.Ip);
             ProbeDataInfo probeDataInfo = new ProbeDataInfo()
             {
@@ -254,7 +264,11 @@ namespace 探伤算法
         {
             if (configs == null) configs = CurrentCardConfigs;
             ProbeInfo probeInfo = configs.Probes.FirstOrDefault(p => p.ProbeName == probeName);
-            if (probeInfo == null) throw new Exception($"板卡配置文件错误，未找到{probeName}的探头配置信息");
+            if (probeInfo == null)
+            {
+                log.Error($"板卡配置文件错误，未找到探头名为{probeName}的探头");
+                return null;
+            }
             CardInfo cardInfo = configs.Cards.FirstOrDefault(c => c.Ip == probeInfo.Ip);
             ProbeDataInfo probeDataInfo = new ProbeDataInfo()
             {

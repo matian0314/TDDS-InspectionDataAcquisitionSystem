@@ -3,11 +3,13 @@ using log4net.Config;
 using log4net.Core;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 
 namespace MyLogger
 {
+    [DebuggerStepThrough]
     public class SubscribeLogger : ILog
     {
         private static readonly ILog log;

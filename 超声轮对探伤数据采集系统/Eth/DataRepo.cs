@@ -8,12 +8,14 @@ using System.Threading;
 using CardConfigurations;
 using System.Threading.Tasks;
 using MyLogger;
+using Tools;
 
 namespace Eth
 {
     public static class DataRepo
     {
         private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
+        private static int WaveNumPerProbe = int.Parse(ConfigurationManager.AppSettings["WaveNumPerProbe"]);
         public static bool WriteMemoryEnabled { get; set; } = true;
         public static string StorageDirectory { get; }
         public static string CombineFilePath { get; }
@@ -22,6 +24,8 @@ namespace Eth
         //用来保证线程安全的锁
         private static readonly object locker = new object();
         private static Dictionary<string, int> CurrentAxle { get; set; } = new Dictionary<string, int>();
+        public static bool IsSampleWheel { get;  set; } = false;
+
         private static readonly int ChannelPerCard = 16;
         private static DateTime FirstMessageReceiveTime;
         public static string SendDataPath = ConfigurationManager.AppSettings["SendDataPath"];
@@ -52,7 +56,7 @@ namespace Eth
                 var key = new RepoKey(ip, channel, axle);
                 if (Repo.ContainsKey(key))
                 {
-                    if (Repo[key].Count < 31)
+                    if (Repo[key].Count < WaveNumPerProbe)
                     {
                         Repo[key].Add(values);
                     }
@@ -75,7 +79,7 @@ namespace Eth
             if (Repo.Keys.Count == 0 || Repo.Values.Sum(v => v.Count) == 0)
             {
                 WriteMemoryEnabled = true;
-                log.Debug($"DataRepo中无数据");
+                log.Info($"DataRepo中无数据");
                 return;
             }
             lock (locker)
@@ -84,11 +88,15 @@ namespace Eth
 
                 try
                 {
-                    log.Info("开始将DataRepo写入磁盘");
+                    log.Info($"开始存储数据，开始数据时间为{FirstMessageReceiveTime:yyyy年MM月dd日HH时mm分ss秒}");
                     folderName = FirstMessageReceiveTime.ToString("yyyy年MM月dd日HH时mm分ss秒");
                     Directory.CreateDirectory(Path.Combine(StorageDirectory, folderName));
                     Directory.CreateDirectory(Path.Combine(SendDataPath, ConfigurationManager.AppSettings["Side"]));
-
+                    if(IsSampleWheel)
+                    {
+                        string path = Path.Combine(StorageDirectory, "repo.json");
+                        FileHelper.WriteFile(path, JsonConvert.SerializeObject(Repo));
+                    }
                     //数据文件 按Ip和轴统计
                     string fileName = "";
                     var orderedRepo = Repo.OrderBy(r => r.Key?.Ip).ThenBy(r => r.Key?.Axle);
@@ -144,29 +152,13 @@ namespace Eth
                         sr.Flush();
                     }
                     log.Info($"生成配置文件{configFileName}");
-                    log.Info($"开始拷贝文件");
+                    log.Info($"开始拷贝{Path.Combine(StorageDirectory, folderName)}中的文件，共{Directory.GetFiles(Path.Combine(StorageDirectory, folderName)).Count()}个");
                     foreach (var file in Directory.GetFiles(Path.Combine(StorageDirectory, folderName)))
                     {
                         File.Copy(file, Path.Combine(CombineFilePath, Path.GetFileName(file)), true);
                         
                     }
-                    //等待5s，确保前台处理完成
-                    log.Debug("RepoWrittenComplete事件触发");
-                    RepoWrittenComplete?.Invoke(folderName);
-
-                    Task.Run(() =>
-                    {
-                        //10分钟，再发送详细数据
-                        Task.Delay(TimeSpan.FromMinutes(10));
-                        Directory.CreateDirectory(Path.Combine(SendDataPath, ConfigurationManager.AppSettings["Side"], folderName));
-                        foreach (var file in Directory.GetFiles(Path.Combine(StorageDirectory, folderName)))
-                        {
-                            File.Copy(file, Path.Combine(SendDataPath, ConfigurationManager.AppSettings["Side"], folderName, Path.GetFileName(file)), true);
-
-                        }
-                    });
-
-                    Thread.Sleep(TimeSpan.FromSeconds(5));
+                    DataRepoWrittenComplete(folderName);
                 }
                 catch (Exception ex)
                 {
@@ -175,6 +167,7 @@ namespace Eth
                 }
                 finally
                 {
+                    log.Info("开始数据清理");
                     Repo.Clear();
                     CurrentAxle.Clear();
                     FirstMessageReceiveTime = DateTime.MinValue;
@@ -182,6 +175,26 @@ namespace Eth
                     GC.Collect();
                 }
             }
+        }
+        public static void DataRepoWrittenComplete(string time)
+        {
+            //等待5s，确保前台处理完成
+            log.Debug("RepoWrittenComplete事件触发");
+            RepoWrittenComplete?.Invoke(time);
+
+            Task.Run(() =>
+            {
+                //10分钟，再发送详细数据
+                Task.Delay(TimeSpan.FromMinutes(10));
+                log.Info($"将{Directory.GetFiles(Path.Combine(StorageDirectory, time))}文件夹中文件拷贝到{Path.Combine(SendDataPath, ConfigurationManager.AppSettings["Side"], time)}中");
+                Directory.CreateDirectory(Path.Combine(SendDataPath, ConfigurationManager.AppSettings["Side"], time));
+                foreach (var file in Directory.GetFiles(Path.Combine(StorageDirectory, time)))
+                {
+                    File.Copy(file, Path.Combine(SendDataPath, ConfigurationManager.AppSettings["Side"], time, Path.GetFileName(file)), true);
+                }
+            });
+
+            Thread.Sleep(TimeSpan.FromSeconds(5));
         }
         private static string GetCurrentAxleKey(string ip, int channel)
         {

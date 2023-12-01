@@ -56,5 +56,31 @@ namespace Helpers
             //返回保留中文的处理结果
             return chineseString;
         }
+
+        public static string KeepDigits(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach(var item in str)
+            {
+                if (item <= 9 && item >= 0)
+                {
+                    sb.Append(item);
+                }
+            }
+            return sb.ToString();
+        }
+
+        public static string RemoveDigits(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var item in str)
+            {
+                if (item <= 9 && item >= 0)
+                {
+                    sb.Append(item);
+                }
+            }
+            return sb.ToString();
+        }
     }
 }

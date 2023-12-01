@@ -32,6 +32,10 @@ namespace CardConfigurations
                 {
                     CreateTestConfigFileForQiqihaer();
                 }
+                else if(ConfigurationManager.AppSettings["Site"].ToString() == "新塘")
+                {
+                    CreateTestConfigFileForGuangzhou();
+                }
             }
             string configString;
             using (StreamReader sr = File.OpenText(path))
@@ -371,15 +375,16 @@ namespace CardConfigurations
         }
         public static void CreateTestConfigFileForJiamusi()
         {
-            log.Info("生成配置文件");
+
+            log.Info("生成佳木斯配置文件");
             CardConfigs configs = new CardConfigs()
             {
-                CardPerSide = 10,
-                ProbePerCard = 16,
-                ProbePerSide = 160,
+                CardPerSide = 16,
+                ProbePerCard = 8,
+                ProbePerSide = 128,
                 LocalIp = ConfigurationManager.AppSettings["LocalIp"],
             };
-            //YW
+            //板卡
             for (int i = 1; i <= 10; i++)
             {
                 CardInfo card = new CardInfo()
@@ -387,12 +392,12 @@ namespace CardConfigurations
                     CardName = $"YWK-{i:00}",
                     Index = i,
                     Ip = $"192.168.1.{19 + i:00}",
-                    Config = gen_cfg_t.Create(16),
+                    Config = gen_cfg_t.Create(8),
                     LineName = LineName.YW
                 };
                 configs.Cards.Add(card);
             }
-            for (int i = 1; i <= 160; i++)
+            for (int i = 1; i <= 128; i++)
             {
                 string type;
                 switch (i % 4)
@@ -547,7 +552,7 @@ namespace CardConfigurations
                         ChannelName = $"ZNK-{(i - 1) % 5 + 1:00}-{(i - 1) / 5 + 1:00}{type}",
                         Channel = (i - 1) / 5 + 1,
                         Index = i,
-                        Config = chan_cfg_t.Create((i - 1) / 5, type),
+                        Config = chan_cfg_t.Create((i - 81) / 5, type),
                         Ip = $"192.168.1.{39 + (i - 1) % 5 + 1:00}",
                         ProbeName = $"ZNT-{i:000}{type}",
                         CardName = $"ZNK-{(i - 1) % 5 + 1:00}",
@@ -659,6 +664,315 @@ namespace CardConfigurations
             string info = JsonConvert.SerializeObject(configs);
             string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameof(CardConfigurations), "CardConfigs.cfg");
             Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameof(CardConfigurations)));
+            using (StreamWriter sw = File.CreateText(path))
+            {
+                sw.Write(info);
+                sw.Flush();
+            }
+            log.Debug($"已生成配置文件{path}");
+        }
+        public static void CreateTestConfigFileForGuangzhou()
+        {
+            log.Info("生成配置文件");
+            CardConfigs configs = new CardConfigs()
+            {
+                CardPerSide = 8,
+                ProbePerCard = 16,
+                ProbePerSide = 128,
+                LocalIp = ConfigurationManager.AppSettings["LocalIp"],
+            };
+            #region YW
+            //Card
+            for (int i = 1; i <= 8; i++)
+            {
+                CardInfo card = new CardInfo()
+                {
+                    CardName = $"YWK-{i:00}",
+                    Index = i,
+                    Ip = $"192.168.1.{19 + i:00}",
+                    Config = gen_cfg_t.Create(16),
+                    LineName = LineName.YW
+                };
+                configs.Cards.Add(card);
+            }
+            //Probe
+            for (int i = 1; i <= 128; i++)
+            {
+                string type;
+                switch (i % 4)
+                {
+                    case 1:
+                        type = "X";
+                        break;
+                    case 2:
+                    case 0:
+                    default:
+                        type = "Z";
+                        break;
+                    case 3:
+                        type = "Y";
+                        break;
+                }
+                ProbeInfo probe;
+                if (i <= 64)
+                {
+                    probe = new ProbeInfo()
+                    {
+                        ChannelName = $"YWK-{(i - 1) % 4 + 1:00}-{(i - 1) / 4 + 1:00}{type}",
+                        Channel = (i - 1) / 4 + 1,
+                        Index = i,
+                        Config = chan_cfg_t.Create((i - 1) / 4, type),
+                        Ip = $"192.168.1.{19 + (i - 1) % 4 + 1:00}",
+                        ProbeName = $"YWT-{i:000}{type}",
+                        CardName = $"YWK-{(i - 1) % 4 + 1:00}",
+                        ProbeTypeCode = type,
+                        LineName = LineName.YW
+                    };
+                }
+                else
+                {
+                    probe = new ProbeInfo()
+                    {
+                        ChannelName = $"YWK-{(i - 1) % 4 + 5:00}-{(i - 65) / 4 + 1:00}{type}",
+                        Channel = (i - 65) / 4 + 1,
+                        Index = i,
+                        Config = chan_cfg_t.Create((i - 65) / 4, type),
+                        Ip = $"192.168.1.{19 + (i - 1) % 4 + 5:00}",
+                        ProbeName = $"YWT-{i:000}{type}",
+                        CardName = $"YWK-{(i - 1) % 4 + 5:00}",
+                        ProbeTypeCode = type,
+                        LineName = LineName.YW
+                    };
+                }
+
+                configs.Probes.Add(probe);
+            }
+            #endregion
+            #region YN
+            //Card
+            for (int i = 1; i <= 8; i++)
+            {
+                CardInfo card = new CardInfo()
+                {
+                    CardName = $"YNK-{i:00}",
+                    Index = i,
+                    Ip = $"192.168.1.{29 + i:00}",
+                    Config = gen_cfg_t.Create(16),
+                    LineName = LineName.YN
+                };
+                configs.Cards.Add(card);
+            }
+            //Probe
+            for (int i = 1; i <= 128; i++)
+            {
+                string type;
+                switch (i % 4)
+                {
+                    case 0:
+                        type = "X";
+                        break;
+                    case 1:
+                    case 3:
+                    default:
+                        type = "Z";
+                        break;
+                    case 2:
+                        type = "Y";
+                        break;
+                }
+                ProbeInfo probe;
+                if (i <= 64)
+                {
+                    probe = new ProbeInfo()
+                    {
+                        ChannelName = $"YNK-{(i - 1) % 4 + 1:00}-{(i - 1) / 4 + 1:00}{type}",
+                        Channel = (i - 1) / 4 + 1,
+                        Index = i,
+                        Config = chan_cfg_t.Create((i - 1) / 4, type),
+                        Ip = $"192.168.1.{29 + (i - 1) % 4 + 1:00}",
+                        ProbeName = $"YNT-{i:000}{type}",
+                        CardName = $"YNK-{(i - 1) % 4 + 1:00}",
+                        ProbeTypeCode = type,
+                        LineName = LineName.YN
+                    };
+                }
+                else
+                {
+                    probe = new ProbeInfo()
+                    {
+                        ChannelName = $"YNK-{(i - 1) % 4 + 5:00}-{(i - 65) / 4 + 1:00}{type}",
+                        Channel = (i - 65) / 4 + 1,
+                        Index = i,
+                        Config = chan_cfg_t.Create((i - 65) / 4, type),
+                        Ip = $"192.168.1.{29 + (i - 1) % 4 + 5:00}",
+                        ProbeName = $"YNT-{i:000}{type}",
+                        CardName = $"YNK-{(i - 1) % 4 + 5:00}",
+                        ProbeTypeCode = type,
+                        LineName = LineName.YN
+                    };
+                }
+
+                configs.Probes.Add(probe);
+            }
+            #endregion
+            #region ZN
+            //Card
+            for (int i = 1; i <= 8; i++)
+            {
+                CardInfo card = new CardInfo()
+                {
+                    CardName = $"ZNK-{i:00}",
+                    Index = i,
+                    Ip = $"192.168.1.{39 + i:00}",
+                    Config = gen_cfg_t.Create(16),
+                    LineName = LineName.ZN
+                };
+                configs.Cards.Add(card);
+            }
+            //Probe
+            for (int i = 1; i <= 128; i++)
+            {
+                string type;
+                switch (i % 4)
+                {
+                    case 0:
+                        type = "X";
+                        break;
+                    case 1:
+                    case 3:
+                    default:
+                        type = "Z";
+                        break;
+                    case 2:
+                        type = "Y";
+                        break;
+                }
+                ProbeInfo probe;
+                if (i <= 64)
+                {
+                    probe = new ProbeInfo()
+                    {
+                        ChannelName = $"ZNK-{(i - 1) % 4 + 1:00}-{(i - 1) / 4 + 1:00}{type}",
+                        Channel = (i - 1) / 4 + 1,
+                        Index = i,
+                        Config = chan_cfg_t.Create((i - 1) / 4, type),
+                        Ip = $"192.168.1.{39 + (i - 1) % 4 + 1:00}",
+                        ProbeName = $"ZNT-{i:000}{type}",
+                        CardName = $"ZNK-{(i - 1) % 4 + 1:00}",
+                        ProbeTypeCode = type,
+                        LineName = LineName.ZN
+                    };
+                }
+                else
+                {
+                    probe = new ProbeInfo()
+                    {
+                        ChannelName = $"ZNK-{(i - 1) % 4 + 5:00}-{(i - 65) / 4 + 1:00}{type}",
+                        Channel = (i - 65) / 4 + 1,
+                        Index = i,
+                        Config = chan_cfg_t.Create((i - 65) / 4, type),
+                        Ip = $"192.168.1.{39 + (i - 1) % 4 + 5:00}",
+                        ProbeName = $"ZNT-{i:000}{type}",
+                        CardName = $"ZNK-{(i - 1) % 4 + 5:00}",
+                        ProbeTypeCode = type,
+                        LineName = LineName.ZN
+                    };
+                }
+
+                configs.Probes.Add(probe);
+            }
+            #endregion
+            #region ZW
+            //Card
+            for (int i = 1; i <= 8; i++)
+            {
+                CardInfo card = new CardInfo()
+                {
+                    CardName = $"ZWK-{i:00}",
+                    Index = i,
+                    Ip = $"192.168.1.{49 + i:00}",
+                    Config = gen_cfg_t.Create(16),
+                    LineName = LineName.ZW
+                };
+                configs.Cards.Add(card);
+            }
+            //Probe
+            for (int i = 1; i <= 128; i++)
+            {
+                string type;
+                switch (i % 4)
+                {
+                    case 1:
+                        type = "X";
+                        break;
+                    case 2:
+                    case 0:
+                    default:
+                        type = "Z";
+                        break;
+                    case 3:
+                        type = "Y";
+                        break;
+                }
+                ProbeInfo probe;
+                if (i <= 64)
+                {
+                    probe = new ProbeInfo()
+                    {
+                        ChannelName = $"ZWK-{(i - 1) % 4 + 1:00}-{(i - 1) / 4 + 1:00}{type}",
+                        Channel = (i - 1) / 4 + 1,
+                        Index = i,
+                        Config = chan_cfg_t.Create((i - 1) / 4, type),
+                        Ip = $"192.168.1.{49 + (i - 1) % 4 + 1:00}",
+                        ProbeName = $"ZWT-{i:000}{type}",
+                        CardName = $"ZWK-{(i - 1) % 4 + 1:00}",
+                        ProbeTypeCode = type,
+                        LineName = LineName.ZW
+                    };
+                }
+                else
+                {
+                    probe = new ProbeInfo()
+                    {
+                        ChannelName = $"ZWK-{(i - 1) % 4 + 5:00}-{(i - 65) / 4 + 1:00}{type}",
+                        Channel = (i - 65) / 4 + 1,
+                        Index = i,
+                        Config = chan_cfg_t.Create((i - 65) / 4, type),
+                        Ip = $"192.168.1.{49 + (i - 1) % 4 + 5:00}",
+                        ProbeName = $"ZWT-{i:000}{type}",
+                        CardName = $"ZWK-{(i - 1) % 4 + 5:00}",
+                        ProbeTypeCode = type,
+                        LineName = LineName.ZW
+                    };
+                }
+
+                configs.Probes.Add(probe);
+            }
+            #endregion
+            foreach (var probe in configs.Probes)
+            {
+                switch (probe.ProbeTypeCode)
+                {
+                    default:
+                        throw new Exception($"无效的ProbeTypeCode值{probe.ProbeTypeCode}");
+                    case "Z":
+                        probe.ProbeType = "直探头";
+                        break;
+                    case "Y":
+                        probe.ProbeType = "斜探头-轮缘";
+                        break;
+                    case "X":
+                        probe.ProbeType = "斜探头";
+                        break;
+                }
+            }
+            string info = JsonConvert.SerializeObject(configs);
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameof(CardConfigurations), "CardConfigs.cfg");
+            Directory.CreateDirectory(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameof(CardConfigurations)));
+            if(Directory.Exists(path))
+            {
+                File.Delete(path);
+            }
             using (StreamWriter sw = File.CreateText(path))
             {
                 sw.Write(info);

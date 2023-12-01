@@ -82,6 +82,7 @@ namespace Tools
             { 
                 File.Delete(path);
             }
+            path = Path.GetFullPath(path);
             var dir = Path.GetDirectoryName(path);
             Directory.CreateDirectory(dir);
             using (StreamWriter sr = File.AppendText(path))
@@ -96,6 +97,7 @@ namespace Tools
             {
                 File.Delete(path);
             }
+            path = Path.GetFullPath(path);
             var dir = Path.GetDirectoryName(path);
             Directory.CreateDirectory(dir);
             using (FileStream fs = File.Create(path))

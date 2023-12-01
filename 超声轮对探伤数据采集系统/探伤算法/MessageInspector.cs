@@ -50,6 +50,7 @@ namespace 探伤算法
                         {
                             KeyValuePair<RepoKey, List<byte[]>> pair = JsonConvert.DeserializeObject<KeyValuePair<RepoKey, List<byte[]>>>(json);
                             ProbeDataInfo info = ProbeDataInfo.CreateFromConfigs(pair.Key, config);
+                            if (info == null) { continue; }
                             ProbeData.Add(info, pair.Value);
                             if (InspectionHelper.Suspected(info, pair.Value))//粗略判断
                             {

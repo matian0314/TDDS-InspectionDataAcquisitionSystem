@@ -22,10 +22,13 @@ namespace 探伤报文
         private static readonly SubscribeLogger log = SubscribeLogger.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType.ToString());
         public static string CombinePath = ConfigurationManager.AppSettings["CombineFilePath"];
         public static string MessagePath = ConfigurationManager.AppSettings["SendFilePath"];
+        public static string StoragePath = ConfigurationManager.AppSettings["StoragePath"];
         public static string MessageStoragePath = ConfigurationManager.AppSettings["InspectionMessageStoragePath"];
+        public static int WaveNumPerProbe = Convert.ToInt32(ConfigurationManager.AppSettings["WaveNumPerProbe"]);
         public List<InspectionMsg> InspectionMsg { get; set; } = new List<InspectionMsg>();
         public List<DefectMsg> DefectMsg { get; set; } = new List<DefectMsg>();
-
+        public SampleWheelInfo LeftWheel { get; set; } = null;
+        public SampleWheelInfo RightWheel { get; set; } = null;
         public static InspectionInfo Create(FileInfo file)
         {
             if (file is null || !File.Exists(file.FullName))
@@ -84,6 +87,7 @@ namespace 探伤报文
                             {
                                 KeyValuePair<RepoKey, List<byte[]>> pair = JsonConvert.DeserializeObject<KeyValuePair<RepoKey, List<byte[]>>>(json);
                                 ProbeDataInfo probeDataInfo = ProbeDataInfo.CreateFromConfigs(pair.Key, config);
+                                if(probeDataInfo == null) { continue; }
                                 if (InspectionHelper.Suspected(probeDataInfo, pair.Value))
                                 {
                                     InspectionResults.Add(probeDataInfo, InspectionManager.Inspect(probeDataInfo, passTime, pair.Value));
@@ -113,7 +117,7 @@ namespace 探伤报文
                                 DefWheelAngle = Math.Round(defect.Angle, 2),
                                 WavePtIntv = probeStatus.WavePtIntv,
                                 ProbAngle = Math.Round(probeConfig.Index * (26 / (Math.PI * defect.WheelDiameter) * 360), 2),
-                                WaveNum = 31,
+                                WaveNum = WaveNumPerProbe,
                                 ProbName = probeConfig.ProbeName,
                                 WheelPos = (probeConfig.LineName == LineName.YW || probeConfig.LineName == LineName.YN) ? 2 : 1,
                                 ProbType = probeStatus.Type,
@@ -148,18 +152,48 @@ namespace 探伤报文
                 
             }
         }
-
         public static void CreateInspectionFileWithPythonScript(string passTime)
         {
             log.Info("开始进行探伤判别");
             log.Info($"调用探伤判别程序");
             string fileName = InspectionManager.CallPythonScript(passTime);
             var inspectionDefects = InspectionJsonResult.ReadJsonResultFile(fileName);
+            SampleWheelInfo sampleWheelInfo = null;
+            if(DataRepo.IsSampleWheel)
+            {
+                sampleWheelInfo = SampleWheel.SampleWheelDetect(inspectionDefects, passTime);
+                if (ConfigurationManager.AppSettings["Site"] == "新塘")
+                {
+                    foreach(var probeName in sampleWheelInfo.DefectProbes[SampleWheelDefectType.踏面刻槽])
+                    {
+                        if(!inspectionDefects.Any(d => d.ProbeName == probeName))
+                        {
+                            inspectionDefects.Add(new InspectionJsonResult()
+                            {
+                                AxleNum = 1,
+                                Confidence = 1,
+                                HasDefect = "有伤",
+                                 ProbeName = probeName,
+                                 FileName = ""
+                            });
+                        }
+                    }
+                }
+            }
+            
             try
             {
                 var config = GetCardConfigs();
                 var axleNum = GetAxleNum();
                 InspectionInfo info = new InspectionInfo();
+                if (ConfigurationManager.AppSettings["Side"] == "左侧")
+                {
+                    info.LeftWheel = sampleWheelInfo;
+                }
+                else
+                {
+                    info.RightWheel = sampleWheelInfo;
+                }
                 //写入常规探伤信息
                 InspectionMsg msg = new InspectionMsg();
                 msg.DevStatus = new DevStatus()
@@ -191,7 +225,8 @@ namespace 探伤报文
                             {
                                 KeyValuePair<RepoKey, List<byte[]>> pair = JsonConvert.DeserializeObject<KeyValuePair<RepoKey, List<byte[]>>>(json);
                                 ProbeDataInfo probeDataInfo = ProbeDataInfo.CreateFromConfigs(pair.Key, config);
-                                if(inspectionDefects.Any(d => d.ProbeName == probeDataInfo.ProbeName && d.HasDefect != "无伤" && d.AxleNum == probeDataInfo.AxleIndex + 1))
+                                if (probeDataInfo == null) { continue; }
+                                if (inspectionDefects.Any(d => d.ProbeName == probeDataInfo.ProbeName && d.HasDefect != "无伤" && d.AxleNum == probeDataInfo.AxleIndex + 1))
                                 {
                                     var defect = inspectionDefects.First(d => d.ProbeName == probeDataInfo.ProbeName && d.HasDefect != "无伤" && d.AxleNum == probeDataInfo.AxleIndex + 1);
                                     var inspectResult = InspectionManager.Inspect(probeDataInfo, passTime, pair.Value);
@@ -227,7 +262,7 @@ namespace 探伤报文
                                 DefWheelAngle = Math.Round(defect.Angle, 2),
                                 WavePtIntv = probeStatus.WavePtIntv,
                                 ProbAngle = Math.Round(probeConfig.Index * (26 / (Math.PI * defect.WheelDiameter) * 360), 2),
-                                WaveNum = 31,
+                                WaveNum = WaveNumPerProbe,
                                 ProbName = probeConfig.ProbeName,
                                 WheelPos = (probeConfig.LineName == LineName.YW || probeConfig.LineName == LineName.YN) ? 2 : 1,
                                 ProbType = probeStatus.Type,

@@ -52,7 +52,7 @@
             </Grid>
             <Grid Grid.Column="2">
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="佳木斯" FontSize="24" Foreground="Brown"></TextBlock>
+                    <TextBlock Text="佳木斯" FontSize="24" Foreground="Brown" Name="SiteTextbox"></TextBlock>
                     <TextBlock Text="数据采集（右侧）" FontSize="24" Foreground="Brown" Name="DataSide"></TextBlock>
                 </StackPanel>
             </Grid>
@@ -235,6 +235,7 @@
             <Grid Grid.Column="0">
                 <StackPanel>
                     <TextBlock Text="系统控制" FontSize="35" Foreground="MidnightBlue" HorizontalAlignment="Center"></TextBlock>
+                    <CheckBox IsChecked="{Binding IsSampleWheel}" FontSize="12">样板轮检测</CheckBox>
                     <Button Content="启动控制" Height="35" Margin="5" Click="EnableControl_Button_Click" Name="EnableControlButton"></Button>
                     <Button Content="停止检测" Height="35" Margin="5" Click="DisableControl_Button_Click" IsEnabled="False" Name="DisableControlButton"></Button>
                     <Button Content="重新初始化连接" Height="35" Margin="5" Click="RestartConnection_Click"  Name="RestartConnection"></Button>

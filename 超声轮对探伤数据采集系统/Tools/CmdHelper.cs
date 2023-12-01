@@ -54,6 +54,7 @@ namespace Tools
             if (!string.IsNullOrEmpty(e.Data))
             {
                 log.Error(e.Data);
+                Debug.WriteLine(e.Data);
             }
         }
 
@@ -62,6 +63,7 @@ namespace Tools
             if (!string.IsNullOrEmpty(e.Data))
             {
                 log.Info(e.Data);
+                Debug.WriteLine(e.Data);
             }
         }
     }

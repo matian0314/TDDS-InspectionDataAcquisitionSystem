@@ -237,5 +237,19 @@ namespace 探伤算法
                 }
             }
         }
+        public static int GetDirection(string probeName)
+        {
+            if(probeName.EndsWith("Z")) return 0;
+            if(probeName.StartsWith("YW") || probeName.StartsWith("ZW"))
+            {
+                if (probeName.EndsWith("Y")) return -1;
+                else return 1;
+            }
+            else
+            {
+                if (probeName.EndsWith("X")) return -1;
+                else return 1;
+            }
+        }
     }
 }

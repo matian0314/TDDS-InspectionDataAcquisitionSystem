@@ -93,11 +93,12 @@
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <StartupObject>超声轮对探伤数据采集系统.Program</StartupObject>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Arction.DirectX, Version=10.2.1.4001, Culture=neutral, PublicKeyToken=6484d7bb14b95dd3, processorArchitecture=MSIL">
@@ -264,6 +265,10 @@
     <Compile Include="Tools\ReadExtensions.cs" />
     <Compile Include="Tools\StringHelper.cs" />
     <Compile Include="Tools\XmlHelper.cs" />
+    <Compile Include="样板轮\FlatBottomHoleResult.cs" />
+    <Compile Include="样板轮\SampleWheelDefectType.cs" />
+    <Compile Include="样板轮\SampleWheelInfo.cs" />
+    <Compile Include="样板轮\WheelHelper.cs" />
     <Compile Include="探伤报文\DefectDetail.cs" />
     <Compile Include="探伤报文\DefectInfo.cs" />
     <Compile Include="探伤报文\DefectMsg.cs" />
@@ -281,9 +286,10 @@
     <Compile Include="探伤算法\InspectSettings.cs" />
     <Compile Include="探伤算法\ManualRecheckResult.cs" />
     <Compile Include="探伤算法\MessageInspector.cs" />
-    <Compile Include="探伤算法\ModelWheelDefect.cs" />
+    <Compile Include="样板轮\SampleWheelDefect.cs" />
     <Compile Include="探伤算法\ModelWheelInspect.cs" />
     <Compile Include="探伤算法\ProbeDataInfo.cs" />
+    <Compile Include="样板轮\SampleWheel.cs" />
     <Page Include="ConfigSettings.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -344,6 +350,18 @@
     <None Include="App_佳木斯_15.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="App_新塘_15.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="App_新塘_16.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="data.dat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="inspection.cfg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Log4net\log4net.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -364,6 +382,9 @@
     <Resource Include="Source\Icon\指示灯亮.png" />
     <Resource Include="Source\Icon\指示灯灭.png" />
     <Resource Include="Source\Icon\车轮.png" />
+    <None Include="Angles.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Arction\Arction.DirectX.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

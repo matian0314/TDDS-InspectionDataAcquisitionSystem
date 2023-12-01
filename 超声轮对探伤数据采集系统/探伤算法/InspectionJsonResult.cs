@@ -19,6 +19,10 @@ namespace 探伤算法
         public static List<InspectionJsonResult> ReadJsonResultFile(string filePath)
         {
             List<InspectionJsonResult> result = new List<InspectionJsonResult>();
+            if(!File.Exists(filePath))
+            {
+                return result;
+            }
             string json = File.ReadAllText(filePath, Encoding.GetEncoding("gb2312"));
             //j[0] 斜探头 j[1] 轮缘探头 j[2] 直探头
             JArray jArray = JArray.Parse(json);

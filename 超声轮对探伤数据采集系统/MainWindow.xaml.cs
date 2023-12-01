@@ -49,6 +49,26 @@ namespace 超声轮对探伤数据采集系统
         public List<string> ConnectedControlBoxIpList { get; set; }
         public EthControlManager EthManager { get; set; }
         public bool IsRightSide { get; set; }
+        private bool isSampleWheel = false;
+        public bool IsSampleWheel
+        {
+            get => isSampleWheel;
+            set
+            {
+                if (value == true)
+                {
+                    log.Info($"样板轮校验启动");
+                }
+                else
+                {
+                    log.Info($"样板轮校验关闭");
+                }
+                
+                isSampleWheel= value;
+                DataRepo.IsSampleWheel = isSampleWheel;
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(nameof(IsSampleWheel)));
+            }
+        }
 
         /// <summary>
         /// 所有板卡（控制箱）的gen_cfg_t配置信息
@@ -95,9 +115,10 @@ namespace 超声轮对探伤数据采集系统
         {
             InitializeComponent();
             InitializeEvents();
-            CreateReviewChart();
+            
             CreateLiveChart();
             Closing += MainWindow_Closing;
+            CreateReviewChart();
             InitializeComplete = true;
         }
 
@@ -111,14 +132,14 @@ namespace 超声轮对探伤数据采集系统
             log.Info("InitializeEvents");
             try
             {
-                //CardConfigs.CreateTestConfigFileForJiamusi();
-            
                 EthManager = new EthControlManager();
                 ConfigLeftOrRight();
                 EthManager.DataGenerated += OnDataGenerated;
                 EthManager.ConnectedIpListChanged += OnConnectedIpListChanged;
+
                 DataRepo.RepoWrittenComplete += OnUpdateCollectionStatus;
                 DataRepo.RepoWrittenComplete += InspectionInfo.CreateInspectionFileWithPythonScript;
+                
                 UpdateConnectionStatus(EthManager.ConnectedIpList);
 
                 
@@ -172,6 +193,7 @@ namespace 超声轮对探伤数据采集系统
 
         private void OnReceive485Message(string message)
         {
+            log.Info($"收到485串口发来的消息");
             var jmessage = (JObject)JsonConvert.DeserializeObject(message);
             if(jmessage["Command"].ToString() == ((int)0x5F).ToString())
             {
@@ -245,6 +267,7 @@ namespace 超声轮对探伤数据采集系统
         private void ConfigLeftOrRight()
         {
             string side = ConfigurationManager.AppSettings["Side"];
+            log.Info($"软件配置为{side}");
             if (side == "左侧")
             {
                 IsRightSide = false;
@@ -257,13 +280,14 @@ namespace 超声轮对探伤数据采集系统
             {
                 throw new Exception("Side只能配置为\"左侧\"或\"右侧\"");
             }
+            SiteTextbox.Text = ConfigurationManager.AppSettings["Site"];
         }
         /// <summary>
         /// 根据软件主机为左侧还是右侧，配置UI文字
         /// </summary>
         private void ConfigUILeftOrRight()
         {
-            this.Title = $"超声轮对探伤数据采集系统 { (IsRightSide ? "右侧" : "左侧") } (机车专用) {Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version}";
+            this.Title = $"超声轮对探伤数据采集系统 { (IsRightSide ? "右侧" : "左侧") } {Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyFileVersionAttribute>().Version}";
             this.DataSide.Text = $"数据采集（{ (IsRightSide ? "右侧" : "左侧") }）";
             if (!IsRightSide)
             {
@@ -275,7 +299,6 @@ namespace 超声轮对探伤数据采集系统
         }
         private void UpdateConnectionStatus(List<string> ConnectedIpList)
         {
-            log.Debug("UpdateConnectionStatus触发");
             if (IsRightSide)
             {
                 var nCard = EthManager.Configs.Cards.Where(c => c.LineName == LineName.YN).Select(c => new CardInfoViewModel(c, ConnectedIpList)).OrderBy(c => c.Index).ToList();
@@ -481,7 +504,8 @@ namespace 超声轮对探伤数据采集系统
         }
         private void RestartConnection_Click(object sender, RoutedEventArgs e)
         {
-            EthManager.RestartConnection();
+            DataRepo.DataRepoWrittenComplete("2022年05月26日10时16分49秒");
+            //EthManager.RestartConnection();
         }
         private void ApplyConfigButton_Click(object sender, RoutedEventArgs e)
         {
@@ -637,7 +661,6 @@ namespace 超声轮对探伤数据采集系统
                     ReviewChart.ViewXY.XAxes[0].Maximum = interval * 500;
                     ReviewChart.ViewXY.PointLineSeries[1].Points = seriesPoints.ToArray();
                     ReviewChart.EndUpdate();
-                    log.Info($"更新回看波形图的探伤参考线,探头为{probe.CardName}板卡的第{probe.Channel}个通道,IP为{probe.Ip}");
                 });
             }
             else// if(chart == LiveChart)
@@ -648,7 +671,6 @@ namespace 超声轮对探伤数据采集系统
                     LiveChart.ViewXY.XAxes[0].Maximum = interval * 500;
                     LiveChart.ViewXY.PointLineSeries[1].Points = seriesPoints.ToArray();
                     LiveChart.EndUpdate();
-                    log.Info($"更新实时波形图的探伤参考线,探头为{probe.CardName}板卡的第{probe.Channel}个通道,IP为{probe.Ip}");
                 });
 
                 
@@ -683,7 +705,8 @@ namespace 超声轮对探伤数据采集系统
             });
         }
         private void TestVehicleCome()
-        {     
+        {
+            int WaveNumPerProbe = Convert.ToInt32(ConfigurationManager.AppSettings["WaveNumPerProbe"]);
             Random rand = new Random(Seed : DateTime.Now.Millisecond);
             Action<string> act = (ip) =>
             {
@@ -694,7 +717,7 @@ namespace 超声轮对探伤数据采集系统
                     for (int channel = 0; channel < 16; channel++)
                     {
                         //每次采集触发31次信号
-                        for (int i = 0; i < 31; i++)
+                        for (int i = 0; i < WaveNumPerProbe; i++)
                         {
                             byte[] data = new byte[500];
                             rand.NextBytes(data);

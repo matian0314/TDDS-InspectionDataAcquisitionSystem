@@ -11,6 +11,8 @@ using Helpers;
 using _485通信._485协议;
 using System.IO;
 using MyLogger;
+using System.Windows.Shapes;
+using Path = System.IO.Path;
 
 namespace 超声轮对探伤数据采集系统.Eth
 {
@@ -101,7 +103,11 @@ namespace 超声轮对探伤数据采集系统.Eth
         }
         public void ResetAllCardConfigs()
         {
-            CardConfigs.CreateTestConfigFileForJiamusi();
+            string cardConfigsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, nameof(CardConfigurations), "CardConfigs.cfg");
+            if (File.Exists(cardConfigsPath))
+            {
+                File.Delete(cardConfigsPath);
+            }
             Configs = CardConfigs.ReadFromFile();
         }
         /// <summary>
@@ -293,7 +299,7 @@ namespace 超声轮对探伤数据采集系统.Eth
             EthDev.set_deal_callback(EthDev.EthCallBack);
             EthDev.ut_eth_init(EthHelper.ToIp(Configs.LocalIp));
             EthDev.ut_eth_run();
-            log.Debug("初始化完成");
+            log.Info("初始化完成");
         }
     }
 }
